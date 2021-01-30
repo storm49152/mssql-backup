@@ -143,7 +143,7 @@ def mssql_connect():
         _line = 'ERROR: [{0}] {1}'.format(_e.args[0], _e.args[1])
         print(_line)
         log_line(_line)
-        exit(_e.args[1])
+        exit(_e.args[0])
     else:
         if DEBUG: print('[mssql_connect()] Connected to database')
 
