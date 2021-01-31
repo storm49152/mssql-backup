@@ -131,10 +131,10 @@ def mssql_connect():
     """
     global DEBUG, DB_DRIVER, DB_HOST, DB_PORT, DB_USER, DB_PASS
 
-    if DEBUG: print('[mssql_connect()]')
+    if (DEBUG == True): print('[mssql_connect()]')
 
     try:
-        if DEBUG: print('[mssql_connect()] Connecting to database')
+        if (DEBUG == True): print('[mssql_connect()] Connecting to database')
         log_line('[mssql_connect] Connect to database server: {0}:{1}'.format(DB_HOST, DB_PORT))
 
         _cn = pyodbc.connect('Driver={0}; Server={1}; Port={2}; UID={3}; PWD={4}'.format(
@@ -145,7 +145,7 @@ def mssql_connect():
         log_line(_line)
         exit(_e.args[0])
     else:
-        if DEBUG: print('[mssql_connect()] Connected to database')
+        if (DEBUG == True): print('[mssql_connect()] Connected to database')
 
         # To prevent error:
         # pyodbc.ProgrammingError: ('42000', '[42000] [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]
@@ -198,7 +198,7 @@ def mssql_get_dbs(_cn):
     """
     global DEBUG, DB_EXCLUDES, DB_INCLUDES
 
-    if DEBUG: log_line('[mssql_get_dbs()]')
+    if (DEBUG == True): log_line('[mssql_get_dbs()]')
 
     _sql = 'SELECT name, recovery_model_desc FROM sys.Databases WHERE state_desc = \'ONLINE\''
     _query = mssql_query(_cn, _sql, True, False)
