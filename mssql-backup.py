@@ -3,7 +3,7 @@
 """
 Date:    2021-01-29
 Author:  storm49152
-License: GPLv3
+License: GPLv2
 """
 
 
