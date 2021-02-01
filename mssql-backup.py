@@ -119,7 +119,7 @@ def log_line(_msg):
     _log_file = '{0}/backup-{1}.log'.format(LOG_DIR, NOW)
     _now      = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-    if (DEBUG == True): print(_msg)
+    if (DEBUG is True): print(_msg)
 
     with open(_log_file, 'a+') as _f:
         _f.write("{0} {1}\n".format(_now, _msg))
@@ -131,10 +131,10 @@ def mssql_connect():
     """
     global DEBUG, DB_DRIVER, DB_HOST, DB_PORT, DB_USER, DB_PASS
 
-    if (DEBUG == True): print('[mssql_connect()]')
+    if (DEBUG is True): print('[mssql_connect()]')
 
     try:
-        if (DEBUG == True): print('[mssql_connect()] Connecting to database')
+        if (DEBUG is True): print('[mssql_connect()] Connecting to database')
         log_line('[mssql_connect] Connect to database server: {0}:{1}'.format(DB_HOST, DB_PORT))
 
         _cn = pyodbc.connect('Driver={0}; Server={1}; Port={2}; UID={3}; PWD={4}'.format(
@@ -145,7 +145,7 @@ def mssql_connect():
         log_line(_line)
         exit(_e.args[0])
     else:
-        if (DEBUG == True): print('[mssql_connect()] Connected to database')
+        if (DEBUG is True): print('[mssql_connect()] Connected to database')
 
         # To prevent error:
         # pyodbc.ProgrammingError: ('42000', '[42000] [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]
@@ -165,11 +165,11 @@ def mssql_query(_cn, _sql, _fetchall=False, _nextset=False):
     _query = None
 
     try:
-        if (_fetchall == True):
+        if (_fetchall is True):
             _query = _cur.execute(_sql).fetchall()
         else:
             _query = _cur.execute(_sql)
-        if (_nextset == True):
+        if (_nextset is True):
             while _cur.nextset(): pass
     except pyodbc.NotSupportedError as _e:
         log_line('ERROR: Operation Not Supported [{0}]'.format(_e.args[0]))
@@ -198,7 +198,7 @@ def mssql_get_dbs(_cn):
     """
     global DEBUG, DB_EXCLUDES, DB_INCLUDES
 
-    if (DEBUG == True): log_line('[mssql_get_dbs()]')
+    if (DEBUG is True): log_line('[mssql_get_dbs()]')
 
     _sql = 'SELECT name, recovery_model_desc FROM sys.Databases WHERE state_desc = \'ONLINE\''
     _query = mssql_query(_cn, _sql, True, False)
@@ -247,7 +247,7 @@ def mssql_backup_data(_cn, _dbs):
         # Create the SQL statement to backup the database.
         _bkp_options = ', '.join(BKP_OPTIONS[_bkp_type]).format(_db['name'])
         _sql = 'BACKUP DATABASE [{0}] TO DISK = N\'{1}\' WITH {2}'.format(_db['name'], _file, _bkp_options)
-        if (DEBUG == True): log_line('[mssql_backup_tr][_sql] {0}'.format(_sql))
+        if (DEBUG is True): log_line('[mssql_backup_tr][_sql] {0}'.format(_sql))
 
         log_line('[mssql_backup_data] Backup database Data ({0}): {1}'.format(_bkp_type, _db['name']))
         log_line('[mssql_backup_data] Backup file: {0}'.format(_file))
@@ -280,7 +280,7 @@ def mssql_backup_tr(_cn, _dbs):
             # Create the SQL statement to backup the Transaction Log.
             _bkp_options = ', '.join(BKP_OPTIONS['transaction_log']).format(_db['name'])
             _sql = 'BACKUP LOG [{0}] TO DISK = N\'{1}\' WITH {2}'.format(_db['name'], _file, _bkp_options)
-            if (DEBUG == True): log_line('[mssql_backup_tr][_sql] {0}'.format(_sql))
+            if (DEBUG is True): log_line('[mssql_backup_tr][_sql] {0}'.format(_sql))
 
             log_line('[mssql_backup_tr] Backup database Transaction Log: {0}'.format(_db['name']))
             log_line('[mssql_backup_tr] Backup file: {0}'.format(_file))
@@ -304,7 +304,7 @@ def main():
 
     _cn = mssql_connect()
     _dbs = mssql_get_dbs(_cn)
-    if (DB_LIST == True):
+    if (DB_LIST is True):
         mssql_show_dbs(_dbs)
     else:
         if (BKP_MODE == 'data'):
